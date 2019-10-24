@@ -1,37 +1,43 @@
 import React, { Component } from 'react';
 
-import * as actions from './actions';
 export default class App extends Component {
+  state = {
+    count: 0
+  };
   increment = () => {
     //得到选择的增量
     const number = this.select.value * 1;
-    //调用store方法更新状态
-    this.props.store.dispatch(actions.increment(number));
+    const count = this.state.count + number;
+    this.setState({ count });
   };
   decrease = () => {
     const number = this.select.value * 1;
-    this.props.store.dispatch(actions.decrement(number));
+    if (this.state.count - number <= 0) {
+      const count = 0;
+      this.setState({ count });
+    } else {
+      const count = this.state.count - number;
+      this.setState({ count });
+    }
   };
   incrementIfOdd = () => {
     const number = this.select.value * 1;
-    //得到原本的count状态
-    const count = this.props.store.getState();
+    const count = this.state.count;
     //判断满足条件才更新
     if (count % 2 === 1) {
-      this.props.store.dispatch(actions.increment(number));
+      this.setState({ count: count + number });
     }
   };
   incrementAsync = () => {
     const number = this.select.value * 1;
-
+    const count = this.state.count + number;
     //启动延时定时器
     setTimeout(() => {
-      this.props.store.dispatch(actions.increment(number));
+      this.setState({ count: count + number });
     }, 1000);
   };
   render() {
-    const count = this.props.store.getState();
-
+    const { count } = this.state;
     return (
       <div>
         <p>Click {count} itmes</p>
